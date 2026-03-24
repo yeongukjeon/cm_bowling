@@ -313,31 +313,35 @@ onSnapshot(STATE_DOC, snap=>{
 });
 
 // ── 옵션 빌드 ──
+// 버튼 DOM 참조 저장 (ID 조회 없이 직접 접근)
+const OPT_BTNS = [];
 function buildOpts(){
   QS.forEach((q,qi)=>{
+    OPT_BTNS[qi]=[];
     const container=document.getElementById(`q${qi}`);
     container.className=q.grid?"opts-grid":"opts-col";
     container.innerHTML="";
     q.opts.forEach((o,oi)=>{
       const btn=document.createElement("button");
       btn.className="opt";
-      btn.id=`opt_${qi}_${oi}`;
-      btn.innerHTML=`<strong></strong><span style="font-size:12px;color:var(--muted);margin-top:2px;display:block"></span>`;
-      btn.querySelector("strong").textContent=o.v;
-      btn.querySelector("span").textContent=o.d;
-      btn.addEventListener("click",()=>pickOpt(qi,oi));
+      const strong=document.createElement("strong");
+      strong.textContent=o.v;
+      const span=document.createElement("span");
+      span.style.cssText="font-size:12px;color:var(--muted);margin-top:2px;display:block";
+      span.textContent=o.d;
+      btn.appendChild(strong);
+      btn.appendChild(span);
+      btn.addEventListener("click",()=>{
+        answers[qi]=o.v;
+        OPT_BTNS[qi].forEach((b,i)=>{ b.className="opt"+(i===oi?" on":""); });
+        document.getElementById(`e-${qi}`).style.display="none";
+      });
+      OPT_BTNS[qi].push(btn);
       container.appendChild(btn);
     });
   });
 }
-window.pickOpt=function(qi,oi){
-  answers[qi]=QS[qi].opts[oi].v;
-  QS[qi].opts.forEach((_,i)=>{
-    const el=document.getElementById(`opt_${qi}_${i}`);
-    if(el) el.className="opt"+(i===oi?" on":"");
-  });
-  document.getElementById(`e-${qi}`).style.display="none";
-};
+// pickOpt은 buildOpts 내부 클로저로 대체됨
 
 // ── 렌더 ──
 function renderAll(){
@@ -478,10 +482,7 @@ window.doAdd=async function(){
     // 폼 리셋
     document.getElementById("nick-inp").value="";
     answers={};
-    QS.forEach((q,qi)=>q.opts.forEach((_,oi)=>{
-      const el=document.getElementById(`opt_${qi}_${oi}`);
-      if(el) el.className="opt";
-    }));
+    QS.forEach((_,qi)=>{ if(OPT_BTNS[qi]) OPT_BTNS[qi].forEach(b=>b.className="opt"); });
 
     // 토스트
     const rem=MAX-updated.length;
