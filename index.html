@@ -14,6 +14,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:32px 16px 80px}
   .wrap{max-width:640px;margin:0 auto}
+
   .header{text-align:center;margin-bottom:28px}
   .header .ico{font-size:44px;margin-bottom:8px}
   .header .sub{font-size:11px;letter-spacing:.2em;color:#7ecfdf;margin-bottom:4px}
@@ -21,6 +22,7 @@
   .header .t1 b{color:var(--pink);font-weight:900}
   .header .t2{font-size:28px;font-weight:900;background:linear-gradient(90deg,var(--pink),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
   .header .ln{width:50px;height:2px;background:linear-gradient(90deg,var(--pink),var(--blue));margin:0 auto;border-radius:2px}
+
   .prog-wrap{margin-bottom:20px}
   .prog-hd{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
   .prog-cnt{font-weight:700;color:var(--pink)}
@@ -31,32 +33,64 @@
   .prog-dots{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:8px}
   .prog-dot{height:6px;border-radius:3px;background:rgba(255,255,255,.08);transition:background .3s}
   .prog-dot.on{background:var(--pink)}
+
   .tabs{display:flex;gap:8px;margin-bottom:20px;align-items:center}
   .tab{flex:none;background:rgba(22,24,48,.7);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 14px;color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
   .tab.on{background:rgba(244,114,182,.2);border-color:var(--pink);color:var(--pink)}
   .live-wrap{margin-left:auto;display:flex;align-items:center;gap:6px}
   .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
   .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px}
   input[type=text],input[type=password]{background:rgba(22,24,48,.9);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;font-size:15px;color:var(--text);width:100%;outline:none;font-family:inherit}
   input:focus{border-color:rgba(244,114,182,.4)}
+
   .opt{background:rgba(22,24,48,.9);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;text-align:left;cursor:pointer;color:#c0c0e0;font-size:13px;font-family:inherit;line-height:1.5;width:100%;display:block}
   .opt.on{background:rgba(244,114,182,.12);border-color:var(--pink);color:#fce7f3}
   .opt strong{color:var(--text);font-weight:700;display:block}
   .opt.on strong{color:#fff}
   .opts-col{display:flex;flex-direction:column;gap:8px}
   .opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
   .grad-btn{background:linear-gradient(90deg,#ec4899,#8b5cf6);border:none;border-radius:10px;padding:13px 24px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
   .grad-btn:disabled{background:rgba(80,30,60,.4);color:#666;cursor:not-allowed}
   .ghost-btn{background:none;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 20px;color:var(--muted);font-size:14px;cursor:pointer;font-family:inherit}
   .ghost-btn.red{border-color:rgba(248,113,113,.3);color:#f87171}
+
   .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
   .ts{background:rgba(244,114,182,.15);color:#f9a8d4;border:1px solid rgba(244,114,182,.3)}
   .tf{background:rgba(52,211,153,.12);color:#6ee7b7;border:1px solid rgba(52,211,153,.3)}
   .tk{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.3)}
+
   .qnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
   .err{color:#f87171;font-size:12px;margin-top:6px;padding-left:4px;display:none}
   .toast{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35);border-radius:12px;padding:12px 18px;margin-bottom:18px;color:#6ee7b7;font-size:13px;display:none}
+
+  /* 팀 공개 전 배너 */
+  .pending-banner{
+    background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(167,139,250,.08));
+    border:1px solid rgba(167,139,250,.25);
+    border-radius:14px;padding:28px 20px;text-align:center;margin-bottom:16px;
+  }
+  .pending-banner .big{font-size:36px;margin-bottom:10px}
+  .pending-banner .msg{font-size:16px;font-weight:700;color:#c4b5fd;margin-bottom:4px}
+  .pending-banner .sub{font-size:13px;color:var(--muted)}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .pending-banner .big{animation:bob 2.4s ease-in-out infinite}
+
+  /* 방장 RUN 설정 패널 */
+  .run-panel{background:linear-gradient(135deg,rgba(244,114,182,.06),rgba(139,92,246,.06));border:1px solid rgba(244,114,182,.2);border-radius:14px;padding:20px;margin-bottom:14px}
+  .run-panel .title{font-size:14px;font-weight:700;color:var(--pink);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+  .run-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .run-label{font-size:13px;color:var(--muted);min-width:64px}
+  .run-ctrl{display:flex;align-items:center;gap:8px}
+  .run-val{font-size:18px;font-weight:900;color:var(--text);min-width:28px;text-align:center}
+  .ctrl-btn{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .15s}
+  .ctrl-btn:hover{background:rgba(244,114,182,.15);border-color:var(--pink)}
+  .run-summary{font-size:13px;color:#a78bfa;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:8px 14px;margin-bottom:16px}
+  .run-btn{background:linear-gradient(90deg,#ec4899,#8b5cf6);border:none;border-radius:10px;padding:14px 24px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;font-family:inherit;width:100%;letter-spacing:.05em;transition:opacity .15s}
+  .run-btn:hover{opacity:.9}
+  .run-btn:disabled{background:rgba(80,30,60,.4);color:#666;cursor:not-allowed}
 
   /* 결과 오버레이 */
   .overlay{position:fixed;inset:0;background:rgba(13,14,26,.97);z-index:200;overflow-y:auto;padding:32px 16px 80px;opacity:0;pointer-events:none;transition:opacity .4s}
@@ -76,7 +110,7 @@
   .sm-btn{background:none;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
   .mrow{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:8px;flex-wrap:wrap}
   .del-btn{background:none;border:none;cursor:pointer;font-size:13px;color:#f87171;font-family:inherit;margin-left:auto}
-  .btn-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+  .btn-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -85,6 +119,7 @@
     <span style="color:var(--pink)">불러오는 중…</span>
   </div>
   <div id="main" class="hidden">
+
     <!-- 헤더 -->
     <div class="header">
       <div class="ico">🎳</div>
@@ -93,6 +128,7 @@
       <div class="t2">볼링대회 팀배정기</div>
       <div class="ln"></div>
     </div>
+
     <!-- 진행률 -->
     <div class="prog-wrap">
       <div class="prog-hd">
@@ -102,6 +138,7 @@
       <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
       <div class="prog-dots" id="prog-dots"></div>
     </div>
+
     <!-- 탭 -->
     <div class="tabs">
       <button class="tab on" id="tab-form" onclick="setTab('form')">✏️ 내 정보 입력</button>
@@ -112,13 +149,21 @@
     <!-- 폼 뷰 -->
     <div id="view-form">
       <div class="toast" id="toast"></div>
-      <!-- 꽉 찼을 때 -->
+
+      <!-- RUN 전: 대기 배너 -->
+      <div class="pending-banner hidden" id="pending-banner">
+        <div class="big">🎳</div>
+        <div class="msg">곧 같은 팀 동료가 공개돼요</div>
+        <div class="sub">방장이 팀 배정을 완료하면 여기에 결과가 나타납니다</div>
+      </div>
+
+      <!-- 꽉 찼을 때 (RUN 전) -->
       <div id="full-msg" class="card hidden" style="text-align:center;padding:32px 20px">
         <div style="font-size:40px;margin-bottom:12px">🎳</div>
         <div style="font-size:16px;font-weight:700;margin-bottom:6px">12명 등록 완료!</div>
-        <div style="font-size:13px;color:var(--muted);margin-bottom:20px">팀 배정 결과를 확인하세요.</div>
-        <button class="grad-btn" style="width:auto;padding:12px 28px" onclick="showResult()">🏆 팀 배정 결과 보기</button>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:4px">방장이 팀을 배정하면 결과가 공개돼요.</div>
       </div>
+
       <!-- 입력 폼 -->
       <div id="form-inner">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -163,10 +208,16 @@
         </div>
         <button class="grad-btn" id="submit-btn" onclick="doAdd()">＋ 추가하기</button>
       </div>
+
+      <!-- RUN 후: 결과 보기 버튼 (폼 뷰 하단) -->
+      <div id="form-result-btn" class="hidden" style="margin-top:20px">
+        <button class="grad-btn" onclick="showResult()">🏆 팀 배정 결과 보기</button>
+      </div>
     </div>
 
     <!-- 방장 뷰 -->
     <div id="view-admin" class="hidden">
+      <!-- 로그인 -->
       <div id="admin-login" style="display:flex;flex-direction:column;align-items:center;padding-top:12px">
         <div class="card" id="login-card" style="width:100%;max-width:360px;text-align:center;padding:36px 28px">
           <div style="font-size:40px;margin-bottom:12px">🔒</div>
@@ -180,10 +231,39 @@
           <button class="grad-btn" onclick="doLogin()">입장하기</button>
         </div>
       </div>
+
+      <!-- 방장 패널 -->
       <div id="admin-panel" class="hidden">
+
+        <!-- ── RUN 설정 패널 ── -->
+        <div class="run-panel">
+          <div class="title">🎯 팀 배정 설정</div>
+          <div class="run-row">
+            <span class="run-label">참여 인원</span>
+            <div class="run-ctrl">
+              <button class="ctrl-btn" onclick="adjRun('members',-1)">−</button>
+              <span class="run-val" id="run-members">12</span>
+              <button class="ctrl-btn" onclick="adjRun('members',+1)">＋</button>
+              <span style="font-size:13px;color:var(--muted);margin-left:4px">명</span>
+            </div>
+          </div>
+          <div class="run-row">
+            <span class="run-label">팀 수</span>
+            <div class="run-ctrl">
+              <button class="ctrl-btn" onclick="adjRun('teams',-1)">−</button>
+              <span class="run-val" id="run-teams">4</span>
+              <button class="ctrl-btn" onclick="adjRun('teams',+1)">＋</button>
+              <span style="font-size:13px;color:var(--muted);margin-left:4px">팀</span>
+            </div>
+          </div>
+          <div class="run-summary" id="run-summary">12명 / 4팀 → 팀당 3명</div>
+          <button class="run-btn" id="run-btn" onclick="doRun()">▶ RUN — 팀 배정 실행</button>
+        </div>
+
+        <!-- 등록 명단 -->
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-            <span style="font-size:15px;font-weight:700">📋 등록 명단 (<span id="admin-cnt">0</span>/12명)</span>
+            <span style="font-size:15px;font-weight:700">📋 등록 명단 (<span id="admin-cnt">0</span>명)</span>
             <div style="display:flex;gap:8px">
               <button class="sm-btn" style="color:#7ecfdf" onclick="renderAdmin()">새로고침</button>
               <button class="sm-btn" style="color:var(--muted)" onclick="doLogout()">🔓 나가기</button>
@@ -191,15 +271,14 @@
           </div>
           <div id="admin-list"></div>
         </div>
+
+        <!-- 액션 버튼들 -->
         <div class="btn-row">
           <button class="grad-btn" id="reassign-btn" style="width:auto;padding:12px 24px;display:none" onclick="doReassign()">🔀 다시 배정</button>
           <button class="ghost-btn red" onclick="doReset()">🗑️ 전체 초기화</button>
           <button class="grad-btn" id="show-res-btn" style="width:auto;padding:12px 24px;display:none" onclick="showResult()">🏆 결과 보기</button>
         </div>
-        <div id="admin-wait" class="card" style="text-align:center;padding:24px 20px">
-          <div style="font-size:28px;margin-bottom:8px">⏳</div>
-          <div id="admin-wait-txt" style="font-size:14px;color:var(--muted)">더 입력하면 자동으로 팀이 배정돼요.</div>
-        </div>
+
       </div>
     </div>
   </div><!-- /main -->
@@ -212,7 +291,7 @@
       <button onclick="hideResult()" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 16px;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit">✕ 닫기</button>
     </div>
     <div class="result-title">🏆 팀 배정 결과</div>
-    <div class="result-sub">스네이크 드래프트 · 예상 점수 균형 배정</div>
+    <div class="result-sub" id="result-sub">균형 배정 완료</div>
     <div id="result-teams"></div>
   </div>
 </div>
@@ -231,7 +310,8 @@ const db = getFirestore(initializeApp({
 }));
 const STATE_DOC = doc(db, "bowling", "state");
 
-const MAX=12, N_TEAMS=4, PW="bowling1234";
+// ── 상수 ──
+const MAX=12, PW="bowling1234";
 const SCORE_MID={"40점 이하":20,"41~70점":55,"71~100점":85,"101~130점":115,"130점 이상":150};
 const STRIKE_BONUS={"스트라이크 0번":0,"스트라이크 1번":5,"스트라이크 2~3번":10,"스트라이크 4번 이상":10};
 const TC=[
@@ -270,82 +350,70 @@ const QS=[
   ]},
 ];
 
-// ── 앱 상태 (onSnapshot이 유일한 업데이트 소스) ──
+// ── 앱 상태 ──
 let fbMembers=[], fbTeams=null;
 let answers={}, adminAuth=false, submitting=false;
+let runMembers=12, runTeams=4; // 방장 RUN 설정
 
+// ── 점수 계산 ──
 function mScore(m){ return (SCORE_MID[m.score]||85)+(STRIKE_BONUS[m.strike]||0); }
 function avgScore(team){ return team.length?Math.round(team.reduce((s,m)=>s+mScore(m),0)/team.length):0; }
-function snake(members){
-  // 1단계: 스네이크 드래프트로 초기 배정
-  const s=[...members].sort((a,b)=>mScore(b)-mScore(a));
-  const t=Array.from({length:N_TEAMS},()=>[]);
-  s.forEach((m,i)=>{ const r=Math.floor(i/N_TEAMS); t[r%2===0?i%N_TEAMS:N_TEAMS-1-i%N_TEAMS].push(m); });
 
-  // 2단계: 팀 간 평균 편차를 줄이는 스왑 반복 (수렴할 때까지)
-  let improved = true;
+// ── 균형 배정 알고리즘 ──
+function balanceAssign(members, nTeams){
+  const s=[...members].sort((a,b)=>mScore(b)-mScore(a));
+  const t=Array.from({length:nTeams},()=>[]);
+  // 스네이크 드래프트 초기 배정
+  s.forEach((m,i)=>{ const r=Math.floor(i/nTeams); t[r%2===0?i%nTeams:nTeams-1-i%nTeams].push(m); });
+  // 스왑 최적화
+  let improved=true;
   while(improved){
-    improved = false;
-    const variance = () => {
-      const avgs = t.map(team => team.reduce((s,m)=>s+mScore(m),0)/team.length);
-      const mean = avgs.reduce((a,b)=>a+b,0)/avgs.length;
+    improved=false;
+    const variance=()=>{
+      const avgs=t.map(team=>team.reduce((s,m)=>s+mScore(m),0)/team.length);
+      const mean=avgs.reduce((a,b)=>a+b,0)/avgs.length;
       return avgs.reduce((s,a)=>s+(a-mean)**2,0);
     };
-    let best = variance();
-    // 모든 팀 쌍에 대해 멤버 스왑 시도
-    for(let ti=0; ti<N_TEAMS; ti++){
-      for(let tj=ti+1; tj<N_TEAMS; tj++){
-        for(let mi=0; mi<t[ti].length; mi++){
-          for(let mj=0; mj<t[tj].length; mj++){
-            // 스왑
-            [t[ti][mi], t[tj][mj]] = [t[tj][mj], t[ti][mi]];
-            const v = variance();
-            if(v < best){
-              best = v; improved = true; // 개선됨 → 유지
-            } else {
-              // 원복
-              [t[ti][mi], t[tj][mj]] = [t[tj][mj], t[ti][mi]];
-            }
-          }
-        }
+    let best=variance();
+    for(let ti=0;ti<nTeams;ti++) for(let tj=ti+1;tj<nTeams;tj++)
+      for(let mi=0;mi<t[ti].length;mi++) for(let mj=0;mj<t[tj].length;mj++){
+        [t[ti][mi],t[tj][mj]]=[t[tj][mj],t[ti][mi]];
+        const v=variance();
+        if(v<best){ best=v; improved=true; }
+        else [t[ti][mi],t[tj][mj]]=[t[tj][mj],t[ti][mi]];
       }
-    }
   }
   return t;
 }
 
-// Firestore 중첩 배열 금지 → 각 멤버에 teamIndex 태그해서 1차원 배열로 저장
+// ── Firestore 저장 (중첩배열 금지 → flat 변환) ──
 function teamsToFlat(teams){
   if(!teams) return null;
-  const flat = [];
-  teams.forEach((teamMembers, ti) => {
-    teamMembers.forEach(m => flat.push({...m, _t: ti}));
-  });
+  const flat=[];
+  teams.forEach((teamMembers,ti)=>teamMembers.forEach(m=>flat.push({...m,_t:ti})));
   return flat;
 }
 function flatToTeams(flat){
-  if(!flat || !flat.length) return null;
-  const t = Array.from({length: N_TEAMS}, () => []);
-  flat.forEach(m => {
-    const {_t, ...member} = m;
-    t[_t].push(member);
-  });
+  if(!flat||!flat.length) return null;
+  // 팀 수는 flat에서 최대 _t+1로 판단
+  const nTeams=Math.max(...flat.map(m=>m._t))+1;
+  const t=Array.from({length:nTeams},()=>[]);
+  flat.forEach(m=>{ const{_t,...member}=m; t[_t].push(member); });
   return t;
 }
 async function persist(members, teams){
-  await setDoc(STATE_DOC, { members, teams: teamsToFlat(teams) });
+  await setDoc(STATE_DOC,{members, teams:teamsToFlat(teams)});
 }
 
-// ── 실시간 리스너: 이게 유일한 state 업데이트 경로 ──
+// ── 실시간 리스너 ──
 onSnapshot(STATE_DOC, snap=>{
-  fbMembers = snap.exists() ? (snap.data().members||[]) : [];
-  fbTeams   = snap.exists() ? flatToTeams(snap.data().teams||null) : null;
+  fbMembers=snap.exists()?(snap.data().members||[]):[];
+  fbTeams=snap.exists()?flatToTeams(snap.data().teams||null):null;
   renderAll();
 });
 
 // ── 옵션 빌드 ──
-// 버튼 DOM 참조 저장 (ID 조회 없이 직접 접근)
-const OPT_BTNS = [];
+const OPT_BTNS=[];
 function buildOpts(){
   QS.forEach((q,qi)=>{
     OPT_BTNS[qi]=[];
@@ -360,8 +428,7 @@ function buildOpts(){
       const span=document.createElement("span");
       span.style.cssText="font-size:12px;color:var(--muted);margin-top:2px;display:block";
       span.textContent=o.d;
-      btn.appendChild(strong);
-      btn.appendChild(span);
+      btn.appendChild(strong); btn.appendChild(span);
       btn.addEventListener("click",()=>{
         answers[qi]=o.v;
         OPT_BTNS[qi].forEach((b,i)=>{ b.className="opt"+(i===oi?" on":""); });
@@ -372,34 +439,51 @@ function buildOpts(){
     });
   });
 }
-// pickOpt은 buildOpts 내부 클로저로 대체됨
 
-// ── 렌더 ──
+// ── 전체 렌더 ──
 function renderAll(){
   const cnt=fbMembers.length, full=cnt>=MAX, rem=MAX-cnt;
+
+  // 진행률
   document.getElementById("prog-fill").style.width=`${(cnt/MAX)*100}%`;
   document.getElementById("prog-fill").className="prog-fill"+(full?" full":"");
   document.getElementById("prog-cnt").textContent=`${cnt} / ${MAX}명 ${full?"✅ 완료":`(${rem}명 남음)`}`;
   document.getElementById("prog-cnt").className="prog-cnt"+(full?" full":"");
   document.getElementById("prog-dots").innerHTML=
     Array.from({length:MAX}).map((_,i)=>`<div class="prog-dot${i<cnt?" on":""}"></div>`).join("");
-  document.getElementById("full-msg").classList.toggle("hidden",!full);
-  document.getElementById("form-inner").classList.toggle("hidden",full);
+
+  // 폼 뷰 상태 결정
+  const hasTeams=!!fbTeams;
+  // 입력 폼: 꽉 찼거나 팀이 공개됐으면 숨김
+  document.getElementById("form-inner").classList.toggle("hidden", full||hasTeams);
+  // 꽉 찼을 때 메시지: 12명 됐지만 팀 미공개일 때
+  document.getElementById("full-msg").classList.toggle("hidden", !(full&&!hasTeams));
+  // 대기 배너: 등록 완료했지만 팀 미공개일 때 (본인이 등록 완료한 경우)
+  document.getElementById("pending-banner").classList.toggle("hidden", hasTeams||(!full&&cnt<MAX));
+  // 결과 보기 버튼: 팀 공개됐을 때
+  document.getElementById("form-result-btn").classList.toggle("hidden", !hasTeams);
+
   document.getElementById("form-badge").textContent=`${cnt}명 등록됨`;
-  // 제출 버튼 — submitting 중엔 절대 건드리지 않음
+
   if(!submitting){
     const btn=document.getElementById("submit-btn");
     btn.disabled=false;
     btn.textContent=`＋ 추가하기 (${cnt+1}/${MAX}번)`;
   }
+
   if(adminAuth) renderAdmin();
-  // 결과 오버레이 열려있으면 갱신
   if(document.getElementById("overlay").classList.contains("show")) renderTeams();
 }
 
 function renderAdmin(){
-  document.getElementById("admin-cnt").textContent=fbMembers.length;
-  document.getElementById("admin-list").innerHTML=fbMembers.length===0
+  const cnt=fbMembers.length;
+  document.getElementById("admin-cnt").textContent=cnt;
+
+  // RUN 설정 요약 업데이트
+  updateRunSummary();
+
+  // 명단
+  document.getElementById("admin-list").innerHTML=cnt===0
     ?`<div style="color:#666880;font-size:14px">아직 등록된 팀원이 없어요.</div>`
     :fbMembers.map(m=>`
       <div class="mrow">
@@ -409,11 +493,10 @@ function renderAdmin(){
         <span class="tag tk">${m.strike}</span>
         <button class="del-btn" onclick="doDel('${m.nick.replace(/'/g,"\\'")}')">삭제</button>
       </div>`).join("");
+
   const has=!!fbTeams;
   document.getElementById("reassign-btn").style.display=has?"":"none";
   document.getElementById("show-res-btn").style.display=has?"":"none";
-  document.getElementById("admin-wait").style.display=has?"none":"";
-  if(!has) document.getElementById("admin-wait-txt").textContent=`${MAX-fbMembers.length}명 더 입력하면 자동으로 팀이 배정돼요.`;
 }
 
 function renderTeams(){
@@ -437,6 +520,51 @@ function renderTeams(){
   }).join("");
 }
 
+// ── RUN 설정 컨트롤 ──
+function updateRunSummary(){
+  const cnt=fbMembers.length;
+  const useMembers=Math.min(runMembers, cnt);
+  document.getElementById("run-members").textContent=useMembers;
+  document.getElementById("run-teams").textContent=runTeams;
+  const perTeam=useMembers>0?`팀당 ${Math.floor(useMembers/runTeams)}~${Math.ceil(useMembers/runTeams)}명`:"등록된 인원 없음";
+  document.getElementById("run-summary").textContent=`${useMembers}명 / ${runTeams}팀 → ${perTeam}`;
+  // RUN 버튼 활성화 조건
+  document.getElementById("run-btn").disabled=(cnt===0||runTeams>cnt||runMembers<runTeams);
+}
+
+window.adjRun=function(field, delta){
+  const cnt=fbMembers.length||1;
+  if(field==="members"){
+    runMembers=Math.max(runTeams, Math.min(cnt, runMembers+delta));
+  } else {
+    runTeams=Math.max(2, Math.min(Math.min(runMembers,6), runTeams+delta));
+    runMembers=Math.max(runMembers, runTeams);
+  }
+  updateRunSummary();
+};
+
+// ── RUN 실행 ──
+window.doRun=async function(){
+  const cnt=fbMembers.length;
+  if(cnt===0) return;
+  const useMembers=Math.min(runMembers, cnt);
+  // 상위 N명 선택 (등록 순서 유지, 방장이 이미 삭제로 조정했으므로 전체 사용)
+  const selected=fbMembers.slice(0, useMembers);
+  if(selected.length<runTeams){ alert("팀 수보다 인원이 적어요."); return; }
+  const result=balanceAssign(selected, runTeams);
+  await persist(fbMembers, result);
+  setTimeout(()=>showResult(), 400);
+};
+
+// ── 다시 배정 ──
+window.doReassign=async function(){
+  if(!fbTeams) return;
+  const nTeams=fbTeams.length;
+  const allMembers=fbTeams.flat();
+  const result=balanceAssign(allMembers, nTeams);
+  await persist(fbMembers, result);
+};
+
 // ── 결과 오버레이 ──
 window.showResult=function(){
   renderTeams();
@@ -456,7 +584,7 @@ window.setTab=function(t){
   document.getElementById("view-admin").classList.toggle("hidden",t!=="admin");
 };
 
-// ── 방장 ──
+// ── 방장 로그인 ──
 window.doLogin=function(){
   if(document.getElementById("pw-inp").value===PW){
     adminAuth=true;
@@ -491,36 +619,27 @@ function validate(){
 
 // ── 등록 ──
 window.doAdd=async function(){
-  if(submitting) return;                        // write 중 중복 방지
-  if(fbMembers.length>=MAX) return;             // 꽉 찼으면 무시
+  if(submitting||fbMembers.length>=MAX) return;
   if(!validate()) return;
   const nick=document.getElementById("nick-inp").value.trim();
   if(fbMembers.find(m=>m.nick===nick)){
     const e=document.getElementById("e-nick"); e.textContent="이미 등록된 닉네임이에요."; e.style.display=""; return;
   }
-
   submitting=true;
   const btn=document.getElementById("submit-btn");
   btn.disabled=true; btn.textContent="저장 중…";
-
   try{
-    const entry={nick, score:answers[0], freq:answers[1], strike:answers[2], style:answers[3]};
-    const updated=[...fbMembers, entry];          // fbMembers = onSnapshot이 관리하는 최신값
-    const newTeams=updated.length>=MAX ? snake(updated) : null;
+    const entry={nick,score:answers[0],freq:answers[1],strike:answers[2],style:answers[3]};
+    const updated=[...fbMembers,entry];
+    await persist(updated, fbTeams); // 기존 팀 유지 (RUN 전엔 null)
 
-    await persist(updated, newTeams);             // 단일 setDoc: members+teams 동시 저장
-
-    // 폼 리셋
     document.getElementById("nick-inp").value="";
     answers={};
     QS.forEach((_,qi)=>{ if(OPT_BTNS[qi]) OPT_BTNS[qi].forEach(b=>b.className="opt"); });
 
-    // 토스트
     const rem=MAX-updated.length;
     const toast=document.getElementById("toast");
-    toast.textContent=rem>0
-      ?`✅ 등록 완료! ${rem}명 더 입력하면 팀이 자동 배정돼요.`
-      :"🎉 전원 등록 완료! 팀 배정 결과를 확인하세요.";
+    toast.textContent=rem>0?`✅ 등록 완료! ${rem}명 남았어요.`:"🎉 전원 등록 완료! 방장이 팀을 배정할 예정이에요.";
     toast.style.display="";
     setTimeout(()=>{ toast.style.display="none"; },4000);
 
@@ -528,22 +647,15 @@ window.doAdd=async function(){
     setTimeout(()=>{
       if(fbMembers.length<MAX){ btn.disabled=false; btn.textContent=`＋ 추가하기 (${fbMembers.length+1}/${MAX}번)`; }
     },1500);
-
-    // 12명 완료 → 자동으로 결과 오버레이 표시
-    if(updated.length>=MAX) setTimeout(()=>showResult(),900);
-
   } catch(err){
     console.error(err);
     btn.textContent="⚠️ 저장 실패 - 다시 시도";
     btn.disabled=false;
-  } finally{
-    submitting=false;
-  }
+  } finally{ submitting=false; }
 };
 
-// ── 삭제 / 재배정 / 초기화 ──
+// ── 삭제 / 초기화 ──
 window.doDel=async function(nick){ await persist(fbMembers.filter(m=>m.nick!==nick), null); };
-window.doReassign=async function(){ await persist(fbMembers, snake(fbMembers)); };
 window.doReset=async function(){
   if(!confirm("전체 초기화할까요? 되돌릴 수 없어요.")) return;
   await persist([],null);
