@@ -275,6 +275,7 @@
         <!-- 액션 버튼들 -->
         <div class="btn-row">
           <button class="grad-btn" id="reassign-btn" style="width:auto;padding:12px 24px;display:none" onclick="doReassign()">🔀 다시 배정</button>
+          <button class="ghost-btn" id="reopen-btn" style="display:none" onclick="doReopen()">➕ 추가 인원 받기</button>
           <button class="ghost-btn red" onclick="doReset()">🗑️ 전체 초기화</button>
           <button class="grad-btn" id="show-res-btn" style="width:auto;padding:12px 24px;display:none" onclick="showResult()">🏆 결과 보기</button>
         </div>
@@ -401,14 +402,16 @@ function flatToTeams(flat){
   flat.forEach(m=>{ const{_t,...member}=m; t[_t].push(member); });
   return t;
 }
-async function persist(members, teams){
-  await setDoc(STATE_DOC,{members, teams:teamsToFlat(teams)});
+async function persist(members, teams, open=true){
+  await setDoc(STATE_DOC,{members, teams:teamsToFlat(teams), open});
 }
 
 // ── 실시간 리스너 ──
+let fbOpen=true; // 입력 폼 공개 여부
 onSnapshot(STATE_DOC, snap=>{
   fbMembers=snap.exists()?(snap.data().members||[]):[];
   fbTeams=snap.exists()?flatToTeams(snap.data().teams||null):null;
+  fbOpen=snap.exists()?(snap.data().open!==false):true; // 기본값 true
   renderAll();
 });
 
@@ -454,12 +457,13 @@ function renderAll(){
 
   // 폼 뷰 상태 결정
   const hasTeams=!!fbTeams;
-  // 입력 폼: 꽉 찼거나 팀이 공개됐으면 숨김
-  document.getElementById("form-inner").classList.toggle("hidden", full||hasTeams);
-  // 꽉 찼을 때 메시지: 12명 됐지만 팀 미공개일 때
+  const formActive=fbOpen&&!full; // 입력 폼 활성: open이고 아직 자리 있음
+  // 입력 폼
+  document.getElementById("form-inner").classList.toggle("hidden", !formActive);
+  // 꽉 찼을 때 메시지: 12명 됐지만 팀 미공개
   document.getElementById("full-msg").classList.toggle("hidden", !(full&&!hasTeams));
-  // 대기 배너: 등록 완료했지만 팀 미공개일 때 (본인이 등록 완료한 경우)
-  document.getElementById("pending-banner").classList.toggle("hidden", hasTeams||(!full&&cnt<MAX));
+  // 대기 배너: 입력은 닫혔고(open=false 또는 full) 팀 미공개
+  document.getElementById("pending-banner").classList.toggle("hidden", hasTeams||formActive||full);
   // 결과 보기 버튼: 팀 공개됐을 때
   document.getElementById("form-result-btn").classList.toggle("hidden", !hasTeams);
 
@@ -497,6 +501,9 @@ function renderAdmin(){
   const has=!!fbTeams;
   document.getElementById("reassign-btn").style.display=has?"":"none";
   document.getElementById("show-res-btn").style.display=has?"":"none";
+  // 추가 인원 받기: 팀 배정 후 & 12명 미만 & 현재 입력 닫힌 상태
+  const canReopen=has&&cnt<MAX&&!fbOpen;
+  document.getElementById("reopen-btn").style.display=canReopen?"":"none";
 }
 
 function renderTeams(){
@@ -552,7 +559,7 @@ window.doRun=async function(){
   const selected=fbMembers.slice(0, useMembers);
   if(selected.length<runTeams){ alert("팀 수보다 인원이 적어요."); return; }
   const result=balanceAssign(selected, runTeams);
-  await persist(fbMembers, result);
+  await persist(fbMembers, result, false); // open=false: 일반유저 입력 폼 닫기
   setTimeout(()=>showResult(), 400);
 };
 
@@ -654,8 +661,13 @@ window.doAdd=async function(){
   } finally{ submitting=false; }
 };
 
-// ── 삭제 / 초기화 ──
+// ── 삭제 / 초기화 / 추가인원 ──
 window.doDel=async function(nick){ await persist(fbMembers.filter(m=>m.nick!==nick), null); };
+window.doReopen=async function(){
+  // 팀 결과는 초기화하고 입력 폼 다시 열기
+  if(!confirm("팀 배정을 초기화하고 추가 인원을 받을까요?")) return;
+  await persist(fbMembers, null, true); // teams=null, open=true
+};
 window.doReset=async function(){
   if(!confirm("전체 초기화할까요? 되돌릴 수 없어요.")) return;
   await persist([],null);
