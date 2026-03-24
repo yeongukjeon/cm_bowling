@@ -515,9 +515,12 @@ function render() {
     `<div class="progress-dot${i<members.length?" filled":""}"></div>`
   ).join("");
 
-  // Submit button
-  const submitBtn = document.getElementById("submit-btn");
-  if (!saving) submitBtn.textContent = `＋ 추가하기 (${members.length+1}/${MAX_MEMBERS}번)`;
+  // Submit button - never touch while saving
+  if (!saving) {
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.disabled = false;
+    submitBtn.textContent = `＋ 추가하기 (${members.length+1}/${MAX_MEMBERS}번)`;
+  }
 
   // form-badge
   document.getElementById("form-badge").textContent = `${members.length}명 등록됨`;
@@ -672,42 +675,50 @@ window.handleAdd = async function() {
   submitBtn.disabled = true;
   submitBtn.textContent = "저장 중…";
 
-  const entry = { nick, score:answers[0], freq:answers[1], strike:answers[2], style:answers[3] };
-  const updated = [...members, entry];
-  if (updated.length >= MAX_MEMBERS) {
-    const result = snakeAssign(updated);
-    await saveMembersAndTeams(updated, result);
-  } else {
-    await saveMembers(updated);
-  }
+  try {
+    const entry = { nick, score:answers[0], freq:answers[1], strike:answers[2], style:answers[3] };
+    const updated = [...members, entry];
+    if (updated.length >= MAX_MEMBERS) {
+      const result = snakeAssign(updated);
+      await saveMembersAndTeams(updated, result);
+    } else {
+      await saveMembers(updated);
+    }
 
-  // reset form
-  document.getElementById("nickname-input").value = "";
-  answers = {};
-  QUESTIONS.forEach((q, qi) => {
-    q.opts.forEach(opt => {
-      const el = document.getElementById(`opt-${qi}-${opt.v.replace(/\s/g,'_')}`);
-      if (el) el.className = "opt-btn";
+    // reset form
+    document.getElementById("nickname-input").value = "";
+    answers = {};
+    QUESTIONS.forEach((q, qi) => {
+      q.opts.forEach(opt => {
+        const el = document.getElementById(`opt-${qi}-${opt.v.replace(/\s/g,'_')}`);
+        if (el) el.className = "opt-btn";
+      });
     });
-  });
 
-  // 토스트 먼저 띄우고
-  const remaining2 = MAX_MEMBERS - updated.length;
-  const addedMsg = document.getElementById("alert-added");
-  const addedText = document.getElementById("alert-added-text");
-  addedText.textContent = remaining2 > 0
-    ? `✅ 등록 완료! ${remaining2}명 더 입력하면 팀이 자동 배정돼요.`
-    : "✅ 전원 등록 완료! 팀이 배정됐어요 🎉";
-  addedMsg.classList.remove("hidden");
-  setTimeout(() => addedMsg.classList.add("hidden"), 4000);
+    // 토스트
+    const remaining2 = MAX_MEMBERS - updated.length;
+    const addedMsg = document.getElementById("alert-added");
+    const addedText = document.getElementById("alert-added-text");
+    addedText.textContent = remaining2 > 0
+      ? `✅ 등록 완료! ${remaining2}명 더 입력하면 팀이 자동 배정돼요.`
+      : "✅ 전원 등록 완료! 팀이 배정됐어요 🎉";
+    addedMsg.classList.remove("hidden");
+    setTimeout(() => addedMsg.classList.add("hidden"), 4000);
 
-  // saving 해제 (render가 덮어쓰기 전에)
-  saving = false;
-  submitBtn.disabled = false;
-  submitBtn.textContent = "✅ 저장 완료!";
-  setTimeout(() => {
-    submitBtn.textContent = `＋ 추가하기 (${updated.length + 1}/${MAX_MEMBERS}번)`;
-  }, 1500);
+    saving = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✅ 저장 완료!";
+    setTimeout(() => {
+      if (members.length < MAX_MEMBERS) {
+        submitBtn.textContent = `＋ 추가하기 (${members.length + 1}/${MAX_MEMBERS}번)`;
+      }
+    }, 1500);
+  } catch(e) {
+    console.error("저장 실패:", e);
+    saving = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "⚠️ 저장 실패 - 다시 시도";
+  }
 };
 
 // ── Delete member ──
