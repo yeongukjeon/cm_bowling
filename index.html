@@ -687,7 +687,10 @@ window.handleAdd = async function() {
   // saving 해제 (render가 덮어쓰기 전에)
   saving = false;
   submitBtn.disabled = false;
-  submitBtn.textContent = `＋ 추가하기 (${updated.length + 1}/${MAX_MEMBERS}번)`;
+  submitBtn.textContent = "✅ 저장 완료!";
+  setTimeout(() => {
+    submitBtn.textContent = `＋ 추가하기 (${updated.length + 1}/${MAX_MEMBERS}번)`;
+  }, 1500);
 };
 
 // ── Delete member ──
