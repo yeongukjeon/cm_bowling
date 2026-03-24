@@ -6,744 +6,498 @@
 <title>🎳 볼링대회 팀배정기</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
-
   :root {
-    --bg: #0d0e1a;
-    --card: rgba(22,24,48,0.85);
-    --border: rgba(255,255,255,0.08);
-    --text: #e0e0f0;
-    --muted: #8888aa;
-    --pink: #f472b6;
-    --blue: #60a5fa;
-    --purple: #a78bfa;
-    --green: #34d399;
-    --yellow: #fbbf24;
+    --bg:#0d0e1a;--card:rgba(22,24,48,0.85);--border:rgba(255,255,255,0.08);
+    --text:#e0e0f0;--muted:#8888aa;--pink:#f472b6;--blue:#60a5fa;
+    --purple:#a78bfa;--green:#34d399;
   }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:32px 16px 80px}
+  .wrap{max-width:640px;margin:0 auto}
+  .header{text-align:center;margin-bottom:28px}
+  .header .ico{font-size:44px;margin-bottom:8px}
+  .header .sub{font-size:11px;letter-spacing:.2em;color:#7ecfdf;margin-bottom:4px}
+  .header .t1{font-size:19px;margin-bottom:2px}
+  .header .t1 b{color:var(--pink);font-weight:900}
+  .header .t2{font-size:28px;font-weight:900;background:linear-gradient(90deg,var(--pink),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+  .header .ln{width:50px;height:2px;background:linear-gradient(90deg,var(--pink),var(--blue));margin:0 auto;border-radius:2px}
+  .prog-wrap{margin-bottom:20px}
+  .prog-hd{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
+  .prog-cnt{font-weight:700;color:var(--pink)}
+  .prog-cnt.full{color:var(--green)}
+  .prog-bar{background:rgba(255,255,255,.06);border-radius:99px;height:8px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--purple));transition:width .4s}
+  .prog-fill.full{background:linear-gradient(90deg,var(--green),#059669)}
+  .prog-dots{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:8px}
+  .prog-dot{height:6px;border-radius:3px;background:rgba(255,255,255,.08);transition:background .3s}
+  .prog-dot.on{background:var(--pink)}
+  .tabs{display:flex;gap:8px;margin-bottom:20px;align-items:center}
+  .tab{flex:none;background:rgba(22,24,48,.7);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 14px;color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+  .tab.on{background:rgba(244,114,182,.2);border-color:var(--pink);color:var(--pink)}
+  .live-wrap{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+  input[type=text],input[type=password]{background:rgba(22,24,48,.9);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;font-size:15px;color:var(--text);width:100%;outline:none;font-family:inherit}
+  input:focus{border-color:rgba(244,114,182,.4)}
+  .opt{background:rgba(22,24,48,.9);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;text-align:left;cursor:pointer;color:#c0c0e0;font-size:13px;font-family:inherit;line-height:1.5;width:100%;display:block}
+  .opt.on{background:rgba(244,114,182,.12);border-color:var(--pink);color:#fce7f3}
+  .opt strong{color:var(--text);font-weight:700;display:block}
+  .opt.on strong{color:#fff}
+  .opts-col{display:flex;flex-direction:column;gap:8px}
+  .opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .grad-btn{background:linear-gradient(90deg,#ec4899,#8b5cf6);border:none;border-radius:10px;padding:13px 24px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
+  .grad-btn:disabled{background:rgba(80,30,60,.4);color:#666;cursor:not-allowed}
+  .ghost-btn{background:none;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 20px;color:var(--muted);font-size:14px;cursor:pointer;font-family:inherit}
+  .ghost-btn.red{border-color:rgba(248,113,113,.3);color:#f87171}
+  .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+  .ts{background:rgba(244,114,182,.15);color:#f9a8d4;border:1px solid rgba(244,114,182,.3)}
+  .tf{background:rgba(52,211,153,.12);color:#6ee7b7;border:1px solid rgba(52,211,153,.3)}
+  .tk{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.3)}
+  .qnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+  .err{color:#f87171;font-size:12px;margin-top:6px;padding-left:4px;display:none}
+  .toast{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35);border-radius:12px;padding:12px 18px;margin-bottom:18px;color:#6ee7b7;font-size:13px;display:none}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* 결과 오버레이 */
+  .overlay{position:fixed;inset:0;background:rgba(13,14,26,.97);z-index:200;overflow-y:auto;padding:32px 16px 80px;opacity:0;pointer-events:none;transition:opacity .4s}
+  .overlay.show{opacity:1;pointer-events:all}
+  .overlay-inner{max-width:640px;margin:0 auto}
+  .result-title{text-align:center;font-size:26px;font-weight:900;background:linear-gradient(90deg,var(--pink),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+  .result-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:24px}
+  .tcard{border-radius:14px;padding:18px 20px;margin-bottom:14px}
+  .thd{font-size:16px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+  .tavg{font-size:12px;font-weight:600;opacity:.85}
+  .tmem{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .tnick{font-size:14px;font-weight:700;min-width:72px}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    min-height: 100vh;
-    padding: 32px 16px 80px;
-  }
-
-  .wrap { max-width: 640px; margin: 0 auto; }
-
-  /* Header */
-  .header { text-align: center; margin-bottom: 28px; }
-  .header .emoji { font-size: 44px; margin-bottom: 8px; }
-  .header .sub { font-size: 11px; letter-spacing: 0.2em; color: #7ecfdf; margin-bottom: 4px; }
-  .header .title1 { font-size: 19px; color: var(--text); margin-bottom: 2px; }
-  .header .title1 span { color: var(--pink); font-weight: 900; }
-  .header .title2 {
-    font-size: 28px; font-weight: 900;
-    background: linear-gradient(90deg, var(--pink), var(--blue));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; margin-bottom: 10px;
-  }
-  .header .line { width: 50px; height: 2px; background: linear-gradient(90deg, var(--pink), var(--blue)); margin: 0 auto; border-radius: 2px; }
-
-  /* Progress */
-  .progress-wrap { margin-bottom: 20px; }
-  .progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-  .progress-header span:first-child { font-size: 13px; color: var(--muted); }
-  .progress-count { font-size: 13px; font-weight: 700; color: var(--pink); }
-  .progress-count.full { color: var(--green); }
-  .progress-bar { background: rgba(255,255,255,0.06); border-radius: 99px; height: 8px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--pink), var(--purple)); transition: width 0.4s; }
-  .progress-fill.full { background: linear-gradient(90deg, var(--green), #059669); }
-  .progress-dots { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-top: 8px; }
-  .progress-dot { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); transition: background 0.3s; }
-  .progress-dot.filled { background: var(--pink); }
-
-  /* Tabs */
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
-  .tab-btn {
-    flex: none; background: rgba(22,24,48,0.7); border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 8px; padding: 8px 14px; color: var(--muted); font-size: 14px; font-weight: 700;
-    cursor: pointer; font-family: inherit; transition: all .15s;
-  }
-  .tab-btn.active { background: rgba(244,114,182,0.2); border-color: var(--pink); color: var(--pink); }
-  .live-badge { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-  .live-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-  .live-text { font-size: 12px; color: var(--green); }
-
-  /* Card */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; }
-
-  /* Input */
-  input[type=text], input[type=password] {
-    background: rgba(22,24,48,0.9); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; padding: 14px 18px; font-size: 15px; color: var(--text);
-    width: 100%; outline: none; font-family: inherit;
-  }
-  input[type=text]:focus, input[type=password]:focus { border-color: rgba(244,114,182,0.4); }
-  input.error { border-color: rgba(248,113,113,0.5) !important; }
-
-  /* Option buttons */
-  .opt-btn {
-    background: rgba(22,24,48,0.9); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px; padding: 12px 16px; text-align: left; cursor: pointer;
-    color: #c0c0e0; font-size: 13px; font-family: inherit; transition: all .14s;
-    line-height: 1.5; width: 100%; display: block;
-  }
-  .opt-btn.selected { background: rgba(244,114,182,0.12); border-color: var(--pink); color: #fce7f3; }
-  .opt-btn strong { color: var(--text); font-weight: 700; display: block; }
-  .opt-btn.selected strong { color: #fff; }
-
-  /* Grid opts */
-  .opts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .opts-col { display: flex; flex-direction: column; gap: 8px; }
-
-  /* Grad button */
-  .grad-btn {
-    background: linear-gradient(90deg, #ec4899, #8b5cf6); border: none;
-    border-radius: 10px; padding: 13px 24px; color: #fff; font-size: 15px;
-    font-weight: 700; cursor: pointer; font-family: inherit; width: 100%; transition: opacity .15s;
-  }
-  .grad-btn:disabled { background: rgba(80,30,60,0.4); color: #666; cursor: not-allowed; }
-  .grad-btn:hover:not(:disabled) { opacity: 0.9; }
-
-  /* Ghost button */
-  .ghost-btn {
-    background: none; border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px; padding: 12px 20px; color: var(--muted); font-size: 14px;
-    cursor: pointer; font-family: inherit;
-  }
-  .ghost-btn.danger { border-color: rgba(248,113,113,0.3); color: #f87171; }
-
-  /* Tags */
-  .tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
-  .tag-score { background: rgba(244,114,182,0.15); color: #f9a8d4; border: 1px solid rgba(244,114,182,0.3); }
-  .tag-freq  { background: rgba(52,211,153,0.12);  color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
-  .tag-strike{ background: rgba(167,139,250,0.15); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
-
-  /* Q number circle */
-  .q-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-
-  /* Error text */
-  .err-text { color: #f87171; font-size: 12px; margin-top: 6px; padding-left: 4px; }
-
-  /* Alert */
-  .alert { border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; }
-  .alert-green { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.35); }
-  .alert-green .title { color: var(--green); font-weight: 700; font-size: 14px; margin-bottom: 2px; }
-  .alert-green .sub { color: #6ee7b7; font-size: 13px; }
-
-  /* Team cards */
-  .team-card { border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
-  .team-header { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
-  .team-member { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-  .team-nick { font-size: 14px; font-weight: 700; min-width: 72px; }
-
-  /* Admin login */
-  .login-wrap { display: flex; flex-direction: column; align-items: center; padding-top: 12px; }
-  .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 36px 28px; width: 100%; max-width: 360px; text-align: center; }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
-  .shake { animation: shake 0.4s ease; }
-
-  /* Spinner */
-  .spinner { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .spinner span { color: var(--pink); font-size: 16px; }
-
-  /* Section title */
-  .section-title { font-size: 15px; font-weight: 700; color: var(--pink); margin-bottom: 14px; text-align: center; }
-
-  .nickname-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .member-badge { background: var(--pink); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
-
-  .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .admin-title { font-size: 15px; font-weight: 700; }
-  .admin-actions { display: flex; gap: 8px; }
-  .sm-btn { background: none; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; font-family: inherit; }
-  .sm-btn.blue { color: #7ecfdf; }
-  .sm-btn.gray { color: var(--muted); }
-
-  .member-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 8px; flex-wrap: wrap; }
-  .del-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #f87171; font-family: inherit; margin-left: auto; }
-
-  .btn-row { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-
-  .full-card { text-align: center; padding: 28px 20px; }
-
-  .waiting-card { text-align: center; padding: 24px 20px; }
-
-  .hidden { display: none !important; }
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .shake{animation:shake .4s ease}
+  .hidden{display:none!important}
+  .sm-btn{background:none;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+  .mrow{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:8px;flex-wrap:wrap}
+  .del-btn{background:none;border:none;cursor:pointer;font-size:13px;color:#f87171;font-family:inherit;margin-left:auto}
+  .btn-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 </style>
 </head>
 <body>
-
-<div class="wrap" id="app">
-  <div class="spinner" id="loading-screen">
-    <span>불러오는 중…</span>
+<div class="wrap">
+  <div id="loading" style="display:flex;align-items:center;justify-content:center;min-height:100vh">
+    <span style="color:var(--pink)">불러오는 중…</span>
   </div>
-  <div id="main-content" class="hidden">
-
-    <!-- Header -->
+  <div id="main" class="hidden">
+    <!-- 헤더 -->
     <div class="header">
-      <div class="emoji">🎳</div>
+      <div class="ico">🎳</div>
       <div class="sub">THE 1ST CHAMPIONSHIP</div>
-      <div class="title1">제 1회 <span>자동차CM사업부</span></div>
-      <div class="title2">볼링대회 팀배정기</div>
-      <div class="line"></div>
+      <div class="t1">제 1회 <b>자동차CM사업부</b></div>
+      <div class="t2">볼링대회 팀배정기</div>
+      <div class="ln"></div>
     </div>
-
-    <!-- Progress -->
-    <div class="progress-wrap">
-      <div class="progress-header">
-        <span>등록 현황</span>
-        <span class="progress-count" id="progress-count">0 / 12명</span>
+    <!-- 진행률 -->
+    <div class="prog-wrap">
+      <div class="prog-hd">
+        <span style="color:var(--muted)">등록 현황</span>
+        <span class="prog-cnt" id="prog-cnt">0 / 12명</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <div class="progress-dots" id="progress-dots"></div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-dots" id="prog-dots"></div>
     </div>
-
-    <!-- Tabs -->
+    <!-- 탭 -->
     <div class="tabs">
-      <button class="tab-btn active" id="tab-form" onclick="switchTab('form')">✏️ 내 정보 입력</button>
-      <button class="tab-btn" id="tab-admin" onclick="switchTab('admin')">🔒 방장 메뉴</button>
-      <div class="live-badge">
-        <div class="live-dot"></div>
-        <span class="live-text">실시간</span>
-      </div>
+      <button class="tab on" id="tab-form" onclick="setTab('form')">✏️ 내 정보 입력</button>
+      <button class="tab" id="tab-admin" onclick="setTab('admin')">🔒 방장 메뉴</button>
+      <div class="live-wrap"><div class="live-dot"></div><span style="font-size:12px;color:var(--green)">실시간</span></div>
     </div>
 
-    <!-- FORM VIEW -->
+    <!-- 폼 뷰 -->
     <div id="view-form">
-      <div id="alert-full" class="alert alert-green hidden">
-        <div class="title">🎉 12명 등록 완료! 팀이 자동 배정됐어요</div>
-        <div class="sub">아래에서 팀 배정 결과를 확인하세요.</div>
+      <div class="toast" id="toast"></div>
+      <!-- 꽉 찼을 때 -->
+      <div id="full-msg" class="card hidden" style="text-align:center;padding:32px 20px">
+        <div style="font-size:40px;margin-bottom:12px">🎳</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:6px">12명 등록 완료!</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:20px">팀 배정 결과를 확인하세요.</div>
+        <button class="grad-btn" style="width:auto;padding:12px 28px" onclick="showResult()">🏆 팀 배정 결과 보기</button>
       </div>
-      <div id="alert-added" class="alert alert-green hidden">
-        <span id="alert-added-text"></span>
-      </div>
-
-      <!-- Full state -->
-      <div id="full-card" class="card full-card hidden">
-        <div style="font-size:32px;margin-bottom:8px">🎳</div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:4px">12명 등록이 완료됐어요!</div>
-        <div style="font-size:13px;color:var(--muted)">아래에서 팀 배정 결과를 확인하세요.</div>
-      </div>
-
-      <!-- Form -->
+      <!-- 입력 폼 -->
       <div id="form-inner">
-        <div class="nickname-row">
-          <span class="member-badge" id="form-badge">1명 등록됨</span>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <span id="form-badge" style="background:var(--pink);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">0명 등록됨</span>
           <span style="font-size:16px;font-weight:700">내 정보 입력</span>
         </div>
-
         <div style="margin-bottom:18px">
-          <input type="text" id="nickname-input" placeholder="닉네임 입력" oninput="clearErr('nick')" />
-          <div class="err-text hidden" id="err-nick"></div>
+          <input type="text" id="nick-inp" placeholder="닉네임 입력" oninput="clearE('nick')" />
+          <div class="err" id="e-nick"></div>
         </div>
-
-        <!-- Q1 -->
         <div style="margin-bottom:20px">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-            <div class="q-num" style="background:#f472b6;color:#fff">1</div>
+            <div class="qnum" style="background:#f472b6;color:#fff">1</div>
             <span style="font-size:15px;font-weight:700">본인 예상 점수대</span>
           </div>
           <div class="opts-col" id="q0"></div>
-          <div class="err-text hidden" id="err-0"></div>
+          <div class="err" id="e-0"></div>
         </div>
-
-        <!-- Q2 -->
         <div style="margin-bottom:20px">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-            <div class="q-num" style="background:#60a5fa;color:#fff">2</div>
+            <div class="qnum" style="background:#60a5fa;color:#fff">2</div>
             <span style="font-size:15px;font-weight:700">최근 3년 내 볼링 횟수</span>
           </div>
           <div class="opts-grid" id="q1"></div>
-          <div class="err-text hidden" id="err-1"></div>
+          <div class="err" id="e-1"></div>
         </div>
-
-        <!-- Q3 -->
         <div style="margin-bottom:20px">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-            <div class="q-num" style="background:#a78bfa;color:#fff">3</div>
+            <div class="qnum" style="background:#a78bfa;color:#fff">3</div>
             <span style="font-size:15px;font-weight:700">10번 던지면 스트라이크 몇 번?</span>
           </div>
           <div class="opts-col" id="q2"></div>
-          <div class="err-text hidden" id="err-2"></div>
+          <div class="err" id="e-2"></div>
         </div>
-
-        <!-- Q4 -->
         <div style="margin-bottom:24px">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-            <div class="q-num" style="background:#fbbf24;color:#1a1400">4</div>
+            <div class="qnum" style="background:#fbbf24;color:#1a1400">4</div>
             <span style="font-size:15px;font-weight:700">공을 던지면?</span>
           </div>
           <div class="opts-col" id="q3"></div>
-          <div class="err-text hidden" id="err-3"></div>
+          <div class="err" id="e-3"></div>
         </div>
-
-        <button class="grad-btn" id="submit-btn" onclick="handleAdd()">＋ 추가하기</button>
-      </div>
-
-      <!-- Team results (form view) -->
-      <div id="form-teams" style="margin-top:28px" class="hidden">
-        <div class="section-title">🏆 팀 배정 결과</div>
-        <div id="form-teams-list"></div>
+        <button class="grad-btn" id="submit-btn" onclick="doAdd()">＋ 추가하기</button>
       </div>
     </div>
 
-    <!-- ADMIN VIEW -->
+    <!-- 방장 뷰 -->
     <div id="view-admin" class="hidden">
-      <!-- Login -->
-      <div id="admin-login">
-        <div class="login-wrap">
-          <div class="login-card" id="login-card">
-            <div style="font-size:40px;margin-bottom:12px">🔒</div>
-            <div style="font-size:17px;font-weight:700;margin-bottom:6px">방장 전용 메뉴</div>
-            <div style="font-size:13px;color:var(--muted);margin-bottom:24px">비밀번호를 입력해주세요</div>
-            <input type="password" id="pw-input" placeholder="••••••••"
-              style="text-align:center;letter-spacing:.25em;font-size:20px;margin-bottom:10px"
-              oninput="document.getElementById('pw-err').classList.add('hidden')"
-              onkeydown="if(event.key==='Enter')tryLogin()" />
-            <div class="err-text hidden" id="pw-err" style="margin-bottom:10px;text-align:center">비밀번호가 틀렸어요.</div>
-            <button class="grad-btn" onclick="tryLogin()">입장하기</button>
-          </div>
+      <div id="admin-login" style="display:flex;flex-direction:column;align-items:center;padding-top:12px">
+        <div class="card" id="login-card" style="width:100%;max-width:360px;text-align:center;padding:36px 28px">
+          <div style="font-size:40px;margin-bottom:12px">🔒</div>
+          <div style="font-size:17px;font-weight:700;margin-bottom:6px">방장 전용 메뉴</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:24px">비밀번호를 입력해주세요</div>
+          <input type="password" id="pw-inp" placeholder="••••••••"
+            style="text-align:center;letter-spacing:.25em;font-size:20px;margin-bottom:10px"
+            oninput="document.getElementById('pw-err').style.display='none'"
+            onkeydown="if(event.key==='Enter')doLogin()" />
+          <div id="pw-err" style="color:#f87171;font-size:13px;margin-bottom:10px;display:none">비밀번호가 틀렸어요.</div>
+          <button class="grad-btn" onclick="doLogin()">입장하기</button>
         </div>
       </div>
-
-      <!-- Admin panel -->
       <div id="admin-panel" class="hidden">
         <div class="card">
-          <div class="admin-header">
-            <span class="admin-title">📋 등록 명단 (<span id="admin-count">0</span>/12명)</span>
-            <div class="admin-actions">
-              <button class="sm-btn blue" onclick="loadData()">새로고침</button>
-              <button class="sm-btn gray" onclick="logoutAdmin()">🔓 나가기</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <span style="font-size:15px;font-weight:700">📋 등록 명단 (<span id="admin-cnt">0</span>/12명)</span>
+            <div style="display:flex;gap:8px">
+              <button class="sm-btn" style="color:#7ecfdf" onclick="renderAdmin()">새로고침</button>
+              <button class="sm-btn" style="color:var(--muted)" onclick="doLogout()">🔓 나가기</button>
             </div>
           </div>
-          <div id="admin-member-list">
-            <div style="color:#666880;font-size:14px">아직 등록된 팀원이 없어요.</div>
-          </div>
+          <div id="admin-list"></div>
         </div>
-
         <div class="btn-row">
-          <button class="grad-btn" id="reassign-btn" style="width:auto;padding:12px 24px" onclick="handleReassign()" onclick="handleReassign()">🔀 다시 배정</button>
-          <button class="ghost-btn danger" onclick="handleResetAll()">🗑️ 전체 초기화</button>
+          <button class="grad-btn" id="reassign-btn" style="width:auto;padding:12px 24px;display:none" onclick="doReassign()">🔀 다시 배정</button>
+          <button class="ghost-btn red" onclick="doReset()">🗑️ 전체 초기화</button>
+          <button class="grad-btn" id="show-res-btn" style="width:auto;padding:12px 24px;display:none" onclick="showResult()">🏆 결과 보기</button>
         </div>
-
-        <div id="admin-teams-wrap">
-          <div class="waiting-card card">
-            <div style="font-size:28px;margin-bottom:8px">⏳</div>
-            <div style="font-size:14px;color:var(--muted)" id="admin-waiting-text">더 입력하면 자동으로 팀이 배정돼요.</div>
-          </div>
+        <div id="admin-wait" class="card" style="text-align:center;padding:24px 20px">
+          <div style="font-size:28px;margin-bottom:8px">⏳</div>
+          <div id="admin-wait-txt" style="font-size:14px;color:var(--muted)">더 입력하면 자동으로 팀이 배정돼요.</div>
         </div>
       </div>
     </div>
+  </div><!-- /main -->
+</div><!-- /wrap -->
 
-  </div><!-- /main-content -->
+<!-- 팀 배정 결과 오버레이 -->
+<div class="overlay" id="overlay">
+  <div class="overlay-inner">
+    <div style="text-align:right;margin-bottom:20px">
+      <button onclick="hideResult()" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 16px;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit">✕ 닫기</button>
+    </div>
+    <div class="result-title">🏆 팀 배정 결과</div>
+    <div class="result-sub">스네이크 드래프트 · 예상 점수 균형 배정</div>
+    <div id="result-teams"></div>
+  </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, deleteDoc, collection, getDocs, writeBatch }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDj3I4EDkEg_EtjXYGobzs8FNcFrPSGmpc",
-  authDomain: "cm-bowling-team.firebaseapp.com",
-  projectId: "cm-bowling-team",
-  storageBucket: "cm-bowling-team.firebasestorage.app",
-  messagingSenderId: "1080401336561",
-  appId: "1:1080401336561:web:919de2dee4cd69f2573150"
-};
+const db = getFirestore(initializeApp({
+  apiKey:"AIzaSyDj3I4EDkEg_EtjXYGobzs8FNcFrPSGmpc",
+  authDomain:"cm-bowling-team.firebaseapp.com",
+  projectId:"cm-bowling-team",
+  storageBucket:"cm-bowling-team.firebasestorage.app",
+  messagingSenderId:"1080401336561",
+  appId:"1:1080401336561:web:919de2dee4cd69f2573150"
+}));
+const STATE_DOC = doc(db, "bowling", "state");
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ── Constants ──
-const MAX_MEMBERS = 12;
-const NUM_TEAMS = 4;
-const ADMIN_PW = "bowling1234";
-const SCORE_WEIGHT = { "40점 이하":1,"41~70점":2,"71~100점":3,"100~150점":4,"150점 이상":5 };
-const TEAM_COLORS = [
-  { bg:"#1e0f2a", border:"#c084fc", badge:"#c084fc", text:"#f3e8ff" },
-  { bg:"#0d1f33", border:"#60a5fa", badge:"#60a5fa", text:"#dbeafe" },
-  { bg:"#0d2a1a", border:"#34d399", badge:"#34d399", text:"#d1fae5" },
-  { bg:"#2a1800", border:"#fbbf24", badge:"#fbbf24", text:"#fef3c7" },
+const MAX=12, N_TEAMS=4, PW="bowling1234";
+const SCORE_MID={"40점 이하":20,"41~70점":55,"71~100점":85,"100~150점":125,"150점 이상":170};
+const STRIKE_BONUS={"스트라이크 0번":0,"스트라이크 1번":5,"스트라이크 2~3번":10,"스트라이크 4번 이상":10};
+const TC=[
+  {bg:"#1e0f2a",border:"#c084fc",badge:"#c084fc",text:"#f3e8ff"},
+  {bg:"#0d1f33",border:"#60a5fa",badge:"#60a5fa",text:"#dbeafe"},
+  {bg:"#0d2a1a",border:"#34d399",badge:"#34d399",text:"#d1fae5"},
+  {bg:"#2a1800",border:"#fbbf24",badge:"#fbbf24",text:"#fef3c7"},
 ];
-const TEAM_NAMES = ["🟣 1팀","🔵 2팀","🟢 3팀","🟡 4팀"];
-
-const QUESTIONS = [
-  { key:"score", opts:[
-    {v:"40점 이하",   desc:"공을 던지면 양옆 홈으로 빠지는 게 일상 💀"},
-    {v:"41~70점",     desc:"핀이 좀 쓰러지긴 하는데 남은 게 항상 더 많음 🙈"},
-    {v:"71~100점",    desc:"운 좋으면 한 판에 한두 번 핀을 다 쓰러뜨리기도 함 🙂"},
-    {v:"100~150점",   desc:"같이 치면 주변에서 잘 친다 소리를 들어본 적 있음 🎱"},
-    {v:"150점 이상",  desc:"볼링장 가면 자기가 제일 잘 치는 경우가 많음 🏆"},
+const TN=["🟣 1팀","🔵 2팀","🟢 3팀","🟡 4팀"];
+const QS=[
+  {key:"score",opts:[
+    {v:"40점 이하",d:"공을 던지면 양옆 홈으로 빠지는 게 일상 💀"},
+    {v:"41~70점",d:"핀이 좀 쓰러지긴 하는데 남은 게 항상 더 많음 🙈"},
+    {v:"71~100점",d:"운 좋으면 한 판에 한두 번 핀을 다 쓰러뜨리기도 함 🙂"},
+    {v:"100~150점",d:"같이 치면 잘 친다 소리를 들어본 적 있음 🎱"},
+    {v:"150점 이상",d:"볼링장 가면 자기가 제일 잘 치는 경우가 많음 🏆"},
   ]},
-  { key:"freq", grid:true, opts:[
-    {v:"0회",       desc:"기억이 가물가물…"},
-    {v:"1~3회",     desc:"해본 적은 있음"},
-    {v:"4~10회",    desc:"가끔 즐기는 편"},
-    {v:"10회 이상", desc:"은근 자주 침"},
+  {key:"freq",grid:true,opts:[
+    {v:"0회",d:"기억이 가물가물…"},
+    {v:"1~3회",d:"해본 적은 있음"},
+    {v:"4~10회",d:"가끔 즐기는 편"},
+    {v:"10회 이상",d:"은근 자주 침"},
   ]},
-  { key:"strike", opts:[
-    {v:"스트라이크 0번",      desc:"한 번도 못 칠 거라는 걸 확신한다 🙏"},
-    {v:"스트라이크 1번",      desc:"그래도 1번은 나오지 않을까? 🤞"},
-    {v:"스트라이크 2~3번",    desc:"감 잡으면 2~3번까지 기대 🌕"},
-    {v:"스트라이크 4번 이상", desc:"4번 이상은 자신 있다 😎"},
+  {key:"strike",opts:[
+    {v:"스트라이크 0번",d:"한 번도 못 칠 거라는 걸 확신한다 🙏"},
+    {v:"스트라이크 1번",d:"그래도 1번은 나오지 않을까? 🤞"},
+    {v:"스트라이크 2~3번",d:"감 잡으면 2~3번까지 기대 🌕"},
+    {v:"스트라이크 4번 이상",d:"4번 이상은 자신 있다 😎"},
   ]},
-  { key:"style", opts:[
-    {v:"던지는 자세부터 모름",         desc:"던지는 자세부터 모른다, 일단 알려주는 사람 필요 👶"},
-    {v:"어디로 갈지 모름",             desc:"어디로 갈지 나도 모른다, 기도하고 던진다 🙏"},
-    {v:"몇 번 치면 방향은 잡힘",       desc:"처음엔 감이 없는데 몇 번 치다 보면 대충 방향은 잡힌다 🎯"},
-    {v:"원하는 방향으로 보낼 수 있음", desc:"첫 판부터 원하는 방향으로 보낼 수 있다 🎯"},
-    {v:"핀 배치 보고 판단 가능",       desc:"핀 배치 보고 어디를 노려야 할지 판단할 수 있다 🧠"},
+  {key:"style",opts:[
+    {v:"던지는 자세부터 모름",d:"일단 알려주는 사람 필요 👶"},
+    {v:"어디로 갈지 모름",d:"기도하고 던진다 🙏"},
+    {v:"몇 번 치면 방향은 잡힘",d:"몇 번 치다 보면 대충 방향은 잡힌다 🎯"},
+    {v:"원하는 방향으로 보낼 수 있음",d:"첫 판부터 원하는 방향으로 보낼 수 있다 🎯"},
+    {v:"핀 배치 보고 판단 가능",d:"핀 배치 보고 어디를 노려야 할지 판단 가능 🧠"},
   ]},
 ];
 
-// ── State ──
-let members = [];
-let teams = null;
-let answers = {};
-let adminAuth = false;
-let saving = false;
+// ── 앱 상태 (onSnapshot이 유일한 업데이트 소스) ──
+let fbMembers=[], fbTeams=null;
+let answers={}, adminAuth=false, submitting=false;
 
-// ── Init options ──
-function buildOptions() {
-  QUESTIONS.forEach((q, qi) => {
-    const el = document.getElementById(`q${qi}`);
-    el.innerHTML = q.opts.map(opt => `
-      <button class="opt-btn" id="opt-${qi}-${opt.v.replace(/\s/g,'_')}"
-        onclick="selectOpt(${qi}, '${opt.v.replace(/'/g,"\\'")}')">
-        <strong>${opt.v}</strong>
-        ${opt.desc ? `<span style="font-size:12px;color:var(--muted);margin-top:2px;display:block">${opt.desc}</span>` : ""}
-      </button>
-    `).join("");
-  });
-}
-
-window.selectOpt = function(qi, val) {
-  answers[qi] = val;
-  const q = QUESTIONS[qi];
-  q.opts.forEach(opt => {
-    const id = `opt-${qi}-${opt.v.replace(/\s/g,'_')}`;
-    const el = document.getElementById(id);
-    if (el) el.className = "opt-btn" + (opt.v === val ? " selected" : "");
-  });
-  clearErr(qi.toString());
-};
-
-// ── Firebase helpers (single doc to avoid race condition) ──
-const STATE_REF = () => doc(db, "bowling", "state");
-
-async function getState() {
-  const snap = await getDoc(STATE_REF());
-  if (!snap.exists()) return { members: [], teams: null };
-  return { members: snap.data().members || [], teams: snap.data().teams || null };
-}
-async function saveMembers(list) {
-  await setDoc(STATE_REF(), { members: list, teams: null }, { merge: false });
-}
-async function saveMembersAndTeams(memberList, teamList) {
-  await setDoc(STATE_REF(), { members: memberList, teams: teamList });
-}
-async function saveTeams(list) {
-  await setDoc(STATE_REF(), { teams: list }, { merge: true });
-}
-async function deleteTeams() {
-  await setDoc(STATE_REF(), { teams: null }, { merge: true });
-}
-
-// ── Load data ──
-window.loadData = async function() {
-  const s = await getState();
-  members = s.members;
-  teams = s.teams;
-  render();
-};
-
-// ── Real-time listener (single doc = no race condition) ──
-function startRealtime() {
-  onSnapshot(doc(db, "bowling", "state"), snap => {
-    if (!snap.exists()) { members = []; teams = null; }
-    else { members = snap.data().members || []; teams = snap.data().teams || null; }
-    render();
-  });
-}
-
-// ── Score weight to midpoint ──
-const SCORE_MID = { "40점 이하":20, "41~70점":55, "71~100점":85, "100~150점":125, "150점 이상":170 };
-const STRIKE_BONUS = { "스트라이크 0번":0, "스트라이크 1번":5, "스트라이크 2~3번":10, "스트라이크 4번 이상":10 };
-
-function memberScore(m) {
-  return (SCORE_MID[m.score] || 85) + (STRIKE_BONUS[m.strike] || 0);
-}
-
-function avgScore(team) {
-  if (!team.length) return 0;
-  return Math.round(team.reduce((s,m) => s + memberScore(m), 0) / team.length);
-}
-
-// ── Snake assign (score-balanced with strike bonus) ──
-function snakeAssign(mbs) {
-  const sorted = [...mbs].sort((a,b) => memberScore(b) - memberScore(a));
-  const t = Array.from({length:NUM_TEAMS}, ()=>[]);
-  sorted.forEach((m,i) => {
-    const row = Math.floor(i/NUM_TEAMS);
-    const col = row%2===0 ? i%NUM_TEAMS : NUM_TEAMS-1-(i%NUM_TEAMS);
-    t[col].push(m);
-  });
+function mScore(m){ return (SCORE_MID[m.score]||85)+(STRIKE_BONUS[m.strike]||0); }
+function avgScore(team){ return team.length?Math.round(team.reduce((s,m)=>s+mScore(m),0)/team.length):0; }
+function snake(members){
+  const s=[...members].sort((a,b)=>mScore(b)-mScore(a));
+  const t=Array.from({length:N_TEAMS},()=>[]);
+  s.forEach((m,i)=>{ const r=Math.floor(i/N_TEAMS); t[r%2===0?i%N_TEAMS:N_TEAMS-1-i%N_TEAMS].push(m); });
   return t;
 }
 
-// ── Render ──
-function render() {
-  const full = members.length >= MAX_MEMBERS;
-  const remaining = MAX_MEMBERS - members.length;
-
-  // Progress
-  const pct = (members.length / MAX_MEMBERS) * 100;
-  const fill = document.getElementById("progress-fill");
-  fill.style.width = pct + "%";
-  fill.className = "progress-fill" + (full ? " full" : "");
-  document.getElementById("progress-count").textContent = `${members.length} / ${MAX_MEMBERS}명 ${full ? "✅ 완료" : `(${remaining}명 남음)`}`;
-  document.getElementById("progress-count").className = "progress-count" + (full ? " full" : "");
-
-  // Dots
-  const dots = document.getElementById("progress-dots");
-  dots.innerHTML = Array.from({length:MAX_MEMBERS}).map((_,i) =>
-    `<div class="progress-dot${i<members.length?" filled":""}"></div>`
-  ).join("");
-
-  // Submit button - never touch while saving
-  if (!saving) {
-    const submitBtn = document.getElementById("submit-btn");
-    submitBtn.disabled = false;
-    submitBtn.textContent = `＋ 추가하기 (${members.length+1}/${MAX_MEMBERS}번)`;
-  }
-
-  // form-badge
-  document.getElementById("form-badge").textContent = `${members.length}명 등록됨`;
-
-  // alert-full
-  toggleEl("alert-full", full && teams);
-
-  // full-card vs form-inner
-  toggleEl("full-card", full);
-  toggleEl("form-inner", !full);
-
-  // form teams
-  if (teams) {
-    show("form-teams");
-    document.getElementById("form-teams-list").innerHTML = teams.map((t,ti) => teamCardHTML(t,ti)).join("");
-  } else {
-    hide("form-teams");
-  }
-
-  // Admin panel
-  if (adminAuth) {
-    document.getElementById("admin-count").textContent = members.length;
-    const list = document.getElementById("admin-member-list");
-    if (members.length === 0) {
-      list.innerHTML = `<div style="color:#666880;font-size:14px">아직 등록된 팀원이 없어요.</div>`;
-    } else {
-      list.innerHTML = members.map(m => `
-        <div class="member-row">
-          <span style="font-size:14px;font-weight:700;min-width:68px">${m.nick}</span>
-          <span class="tag tag-score">${m.score}</span>
-          <span class="tag tag-freq">${m.freq}</span>
-          <span class="tag tag-strike">${m.strike}</span>
-          <button class="del-btn" onclick="deleteMember('${m.nick.replace(/'/g,"\\'")}')">삭제</button>
-        </div>
-      `).join("");
-    }
-
-    // reassign btn
-    toggleEl("reassign-btn", !!teams);
-
-    if (teams) {
-      document.getElementById("admin-teams-wrap").innerHTML =
-        `<div style="font-size:15px;font-weight:700;color:var(--pink);margin-bottom:14px">🏆 팀 배정 결과 (${NUM_TEAMS}팀 · 스네이크 드래프트)</div>` +
-        teams.map((t,ti) => teamCardHTML(t,ti)).join("");
-    } else {
-      document.getElementById("admin-teams-wrap").innerHTML = `
-        <div class="waiting-card card">
-          <div style="font-size:28px;margin-bottom:8px">⏳</div>
-          <div style="font-size:14px;color:var(--muted)">${remaining}명 더 입력하면 자동으로 팀이 배정돼요.</div>
-        </div>`;
-    }
-  }
+async function persist(members, teams){
+  await setDoc(STATE_DOC,{members, teams: teams??null});
 }
 
-function teamCardHTML(team, ti) {
-  const c = TEAM_COLORS[ti];
-  const avg = avgScore(team);
-  return `
-    <div class="team-card" style="background:${c.bg};border:1px solid ${c.border}">
-      <div class="team-header" style="color:${c.badge};display:flex;align-items:center;justify-content:space-between">
-        <span>${TEAM_NAMES[ti]} · ${team.length}명</span>
-        <span style="font-size:12px;font-weight:600;opacity:0.85">평균 ${avg}점</span>
-      </div>
-      ${team.map(m => `
-        <div class="team-member">
-          <span class="team-nick" style="color:${c.text}">${m.nick}</span>
-          <span class="tag tag-score">${m.score}</span>
-          <span class="tag tag-freq">${m.freq}</span>
-          <span class="tag tag-strike">${m.strike}</span>
-        </div>
-      `).join("")}
-    </div>`;
-}
+// ── 실시간 리스너: 이게 유일한 state 업데이트 경로 ──
+onSnapshot(STATE_DOC, snap=>{
+  fbMembers = snap.exists() ? (snap.data().members||[]) : [];
+  fbTeams   = snap.exists() ? (snap.data().teams||null)  : null;
+  renderAll();
+});
 
-// ── Helpers ──
-function show(id) { document.getElementById(id).classList.remove("hidden"); }
-function hide(id) { document.getElementById(id).classList.add("hidden"); }
-function toggleEl(id, visible) { visible ? show(id) : hide(id); }
-window.clearErr = function(key) {
-  const el = document.getElementById(`err-${key}`);
-  if (el) el.classList.add("hidden");
-};
-
-// ── Tab ──
-window.switchTab = function(tab) {
-  document.getElementById("tab-form").className = "tab-btn" + (tab==="form"?" active":"");
-  document.getElementById("tab-admin").className = "tab-btn" + (tab==="admin"?" active":"");
-  toggleEl("view-form", tab==="form");
-  toggleEl("view-admin", tab==="admin");
-  document.getElementById("tab-admin").textContent = adminAuth ? "🎯 방장 메뉴" : "🔒 방장 메뉴";
-};
-
-// ── Admin login ──
-window.tryLogin = function() {
-  const pw = document.getElementById("pw-input").value;
-  if (pw === ADMIN_PW) {
-    adminAuth = true;
-    hide("admin-login");
-    show("admin-panel");
-    document.getElementById("tab-admin").textContent = "🎯 방장 메뉴";
-    render();
-  } else {
-    document.getElementById("pw-input").value = "";
-    show("pw-err");
-    const card = document.getElementById("login-card");
-    card.classList.add("shake");
-    setTimeout(() => card.classList.remove("shake"), 500);
-  }
-};
-
-window.logoutAdmin = function() {
-  adminAuth = false;
-  show("admin-login");
-  hide("admin-panel");
-  document.getElementById("tab-admin").textContent = "🔒 방장 메뉴";
-};
-
-// ── Validate ──
-function validate() {
-  let ok = true;
-  const nick = document.getElementById("nickname-input").value.trim();
-  if (!nick) {
-    const el = document.getElementById("err-nick");
-    el.textContent = "닉네임을 입력해주세요.";
-    el.classList.remove("hidden");
-    ok = false;
-  }
-  QUESTIONS.forEach((_, i) => {
-    if (!answers[i]) {
-      const el = document.getElementById(`err-${i}`);
-      el.textContent = "선택해주세요.";
-      el.classList.remove("hidden");
-      ok = false;
-    }
+// ── 옵션 빌드 ──
+function buildOpts(){
+  QS.forEach((q,qi)=>{
+    const el=document.getElementById(`q${qi}`);
+    el.className=q.grid?"opts-grid":"opts-col";
+    el.innerHTML=q.opts.map(o=>`
+      <button class="opt" id="opt_${qi}_${o.v.replace(/\W/g,'_')}"
+        onclick="pickOpt(${qi},'${o.v.replace(/'/g,"\\'")}')">
+        <strong>${o.v}</strong>
+        <span style="font-size:12px;color:var(--muted);margin-top:2px;display:block">${o.d}</span>
+      </button>`).join("");
   });
+}
+window.pickOpt=function(qi,val){
+  answers[qi]=val;
+  QS[qi].opts.forEach(o=>{
+    const el=document.getElementById(`opt_${qi}_${o.v.replace(/\W/g,'_')}`);
+    if(el) el.className="opt"+(o.v===val?" on":"");
+  });
+  document.getElementById(`e-${qi}`).style.display="none";
+};
+
+// ── 렌더 ──
+function renderAll(){
+  const cnt=fbMembers.length, full=cnt>=MAX, rem=MAX-cnt;
+  document.getElementById("prog-fill").style.width=`${(cnt/MAX)*100}%`;
+  document.getElementById("prog-fill").className="prog-fill"+(full?" full":"");
+  document.getElementById("prog-cnt").textContent=`${cnt} / ${MAX}명 ${full?"✅ 완료":`(${rem}명 남음)`}`;
+  document.getElementById("prog-cnt").className="prog-cnt"+(full?" full":"");
+  document.getElementById("prog-dots").innerHTML=
+    Array.from({length:MAX}).map((_,i)=>`<div class="prog-dot${i<cnt?" on":""}"></div>`).join("");
+  document.getElementById("full-msg").classList.toggle("hidden",!full);
+  document.getElementById("form-inner").classList.toggle("hidden",full);
+  document.getElementById("form-badge").textContent=`${cnt}명 등록됨`;
+  // 제출 버튼 — submitting 중엔 절대 건드리지 않음
+  if(!submitting){
+    const btn=document.getElementById("submit-btn");
+    btn.disabled=false;
+    btn.textContent=`＋ 추가하기 (${cnt+1}/${MAX}번)`;
+  }
+  if(adminAuth) renderAdmin();
+  // 결과 오버레이 열려있으면 갱신
+  if(document.getElementById("overlay").classList.contains("show")) renderTeams();
+}
+
+function renderAdmin(){
+  document.getElementById("admin-cnt").textContent=fbMembers.length;
+  document.getElementById("admin-list").innerHTML=fbMembers.length===0
+    ?`<div style="color:#666880;font-size:14px">아직 등록된 팀원이 없어요.</div>`
+    :fbMembers.map(m=>`
+      <div class="mrow">
+        <span style="font-size:14px;font-weight:700;min-width:68px">${m.nick}</span>
+        <span class="tag ts">${m.score}</span>
+        <span class="tag tf">${m.freq}</span>
+        <span class="tag tk">${m.strike}</span>
+        <button class="del-btn" onclick="doDel('${m.nick.replace(/'/g,"\\'")}')">삭제</button>
+      </div>`).join("");
+  const has=!!fbTeams;
+  document.getElementById("reassign-btn").style.display=has?"":"none";
+  document.getElementById("show-res-btn").style.display=has?"":"none";
+  document.getElementById("admin-wait").style.display=has?"none":"";
+  if(!has) document.getElementById("admin-wait-txt").textContent=`${MAX-fbMembers.length}명 더 입력하면 자동으로 팀이 배정돼요.`;
+}
+
+function renderTeams(){
+  if(!fbTeams) return;
+  document.getElementById("result-teams").innerHTML=fbTeams.map((team,ti)=>{
+    const c=TC[ti], avg=avgScore(team);
+    return `
+      <div class="tcard" style="background:${c.bg};border:1px solid ${c.border}">
+        <div class="thd" style="color:${c.badge}">
+          <span>${TN[ti]} · ${team.length}명</span>
+          <span class="tavg">평균 ${avg}점</span>
+        </div>
+        ${team.map(m=>`
+          <div class="tmem">
+            <span class="tnick" style="color:${c.text}">${m.nick}</span>
+            <span class="tag ts">${m.score}</span>
+            <span class="tag tf">${m.freq}</span>
+            <span class="tag tk">${m.strike}</span>
+          </div>`).join("")}
+      </div>`;
+  }).join("");
+}
+
+// ── 결과 오버레이 ──
+window.showResult=function(){
+  renderTeams();
+  document.getElementById("overlay").classList.add("show");
+  document.body.style.overflow="hidden";
+};
+window.hideResult=function(){
+  document.getElementById("overlay").classList.remove("show");
+  document.body.style.overflow="";
+};
+
+// ── 탭 ──
+window.setTab=function(t){
+  document.getElementById("tab-form").className="tab"+(t==="form"?" on":"");
+  document.getElementById("tab-admin").className="tab"+(t==="admin"?" on":"");
+  document.getElementById("view-form").classList.toggle("hidden",t!=="form");
+  document.getElementById("view-admin").classList.toggle("hidden",t!=="admin");
+};
+
+// ── 방장 ──
+window.doLogin=function(){
+  if(document.getElementById("pw-inp").value===PW){
+    adminAuth=true;
+    document.getElementById("admin-login").classList.add("hidden");
+    document.getElementById("admin-panel").classList.remove("hidden");
+    document.getElementById("tab-admin").textContent="🎯 방장 메뉴";
+    renderAdmin();
+  } else {
+    document.getElementById("pw-inp").value="";
+    document.getElementById("pw-err").style.display="";
+    const c=document.getElementById("login-card");
+    c.classList.add("shake"); setTimeout(()=>c.classList.remove("shake"),500);
+  }
+};
+window.doLogout=function(){
+  adminAuth=false;
+  document.getElementById("admin-login").classList.remove("hidden");
+  document.getElementById("admin-panel").classList.add("hidden");
+  document.getElementById("tab-admin").textContent="🔒 방장 메뉴";
+};
+
+// ── 유효성 ──
+window.clearE=function(k){ document.getElementById(`e-${k}`).style.display="none"; };
+function validate(){
+  let ok=true;
+  if(!document.getElementById("nick-inp").value.trim()){
+    const e=document.getElementById("e-nick"); e.textContent="닉네임을 입력해주세요."; e.style.display=""; ok=false;
+  }
+  QS.forEach((_,i)=>{ if(!answers[i]){ const e=document.getElementById(`e-${i}`); e.textContent="선택해주세요."; e.style.display=""; ok=false; } });
   return ok;
 }
 
-// ── Add member ──
-window.handleAdd = async function() {
-  if (saving || members.length >= MAX_MEMBERS) return;
-  if (!validate()) return;
-  const nick = document.getElementById("nickname-input").value.trim();
-  if (members.find(m => m.nick === nick)) {
-    const el = document.getElementById("err-nick");
-    el.textContent = "이미 등록된 닉네임이에요.";
-    el.classList.remove("hidden");
-    return;
+// ── 등록 ──
+window.doAdd=async function(){
+  if(submitting) return;                        // write 중 중복 방지
+  if(fbMembers.length>=MAX) return;             // 꽉 찼으면 무시
+  if(!validate()) return;
+  const nick=document.getElementById("nick-inp").value.trim();
+  if(fbMembers.find(m=>m.nick===nick)){
+    const e=document.getElementById("e-nick"); e.textContent="이미 등록된 닉네임이에요."; e.style.display=""; return;
   }
-  saving = true;
-  const submitBtn = document.getElementById("submit-btn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "저장 중…";
 
-  try {
-    const entry = { nick, score:answers[0], freq:answers[1], strike:answers[2], style:answers[3] };
-    const updated = [...members, entry];
-    if (updated.length >= MAX_MEMBERS) {
-      const result = snakeAssign(updated);
-      await saveMembersAndTeams(updated, result);
-    } else {
-      await saveMembers(updated);
-    }
+  submitting=true;
+  const btn=document.getElementById("submit-btn");
+  btn.disabled=true; btn.textContent="저장 중…";
 
-    // reset form
-    document.getElementById("nickname-input").value = "";
-    answers = {};
-    QUESTIONS.forEach((q, qi) => {
-      q.opts.forEach(opt => {
-        const el = document.getElementById(`opt-${qi}-${opt.v.replace(/\s/g,'_')}`);
-        if (el) el.className = "opt-btn";
-      });
-    });
+  try{
+    const entry={nick, score:answers[0], freq:answers[1], strike:answers[2], style:answers[3]};
+    const updated=[...fbMembers, entry];          // fbMembers = onSnapshot이 관리하는 최신값
+    const newTeams=updated.length>=MAX ? snake(updated) : null;
+
+    await persist(updated, newTeams);             // 단일 setDoc: members+teams 동시 저장
+
+    // 폼 리셋
+    document.getElementById("nick-inp").value="";
+    answers={};
+    QS.forEach((q,qi)=>q.opts.forEach(o=>{
+      const el=document.getElementById(`opt_${qi}_${o.v.replace(/\W/g,'_')}`);
+      if(el) el.className="opt";
+    }));
 
     // 토스트
-    const remaining2 = MAX_MEMBERS - updated.length;
-    const addedMsg = document.getElementById("alert-added");
-    const addedText = document.getElementById("alert-added-text");
-    addedText.textContent = remaining2 > 0
-      ? `✅ 등록 완료! ${remaining2}명 더 입력하면 팀이 자동 배정돼요.`
-      : "✅ 전원 등록 완료! 팀이 배정됐어요 🎉";
-    addedMsg.classList.remove("hidden");
-    setTimeout(() => addedMsg.classList.add("hidden"), 4000);
+    const rem=MAX-updated.length;
+    const toast=document.getElementById("toast");
+    toast.textContent=rem>0
+      ?`✅ 등록 완료! ${rem}명 더 입력하면 팀이 자동 배정돼요.`
+      :"🎉 전원 등록 완료! 팀 배정 결과를 확인하세요.";
+    toast.style.display="";
+    setTimeout(()=>{ toast.style.display="none"; },4000);
 
-    saving = false;
-    submitBtn.disabled = false;
-    submitBtn.textContent = "✅ 저장 완료!";
-    setTimeout(() => {
-      if (members.length < MAX_MEMBERS) {
-        submitBtn.textContent = `＋ 추가하기 (${members.length + 1}/${MAX_MEMBERS}번)`;
-      }
-    }, 1500);
-  } catch(e) {
-    console.error("저장 실패:", e);
-    saving = false;
-    submitBtn.disabled = false;
-    submitBtn.textContent = "⚠️ 저장 실패 - 다시 시도";
+    btn.textContent="✅ 저장 완료!";
+    setTimeout(()=>{
+      if(fbMembers.length<MAX){ btn.disabled=false; btn.textContent=`＋ 추가하기 (${fbMembers.length+1}/${MAX}번)`; }
+    },1500);
+
+    // 12명 완료 → 자동으로 결과 오버레이 표시
+    if(updated.length>=MAX) setTimeout(()=>showResult(),900);
+
+  } catch(err){
+    console.error(err);
+    btn.textContent="⚠️ 저장 실패 - 다시 시도";
+    btn.disabled=false;
+  } finally{
+    submitting=false;
   }
 };
 
-// ── Delete member ──
-window.deleteMember = async function(nick) {
-  const updated = members.filter(m => m.nick !== nick);
-  await saveMembersAndTeams(updated, null);
+// ── 삭제 / 재배정 / 초기화 ──
+window.doDel=async function(nick){ await persist(fbMembers.filter(m=>m.nick!==nick), null); };
+window.doReassign=async function(){ await persist(fbMembers, snake(fbMembers)); };
+window.doReset=async function(){
+  if(!confirm("전체 초기화할까요? 되돌릴 수 없어요.")) return;
+  await persist([],null);
 };
 
-// ── Reassign ──
-window.handleReassign = async function() {
-  const result = snakeAssign(members);
-  await saveTeams(result);
-};
-
-// ── Reset all ──
-window.handleResetAll = async function() {
-  if (!confirm("전체 초기화할까요? 되돌릴 수 없어요.")) return;
-  await saveMembersAndTeams([], null);
-};
-
-// ── Boot ──
-buildOptions();
-startRealtime();
-hide("loading-screen");
-show("main-content");
+// ── 시작 ──
+buildOpts();
+document.getElementById("loading").style.display="none";
+document.getElementById("main").classList.remove("hidden");
 </script>
 </body>
 </html>
