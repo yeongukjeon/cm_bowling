@@ -283,14 +283,25 @@ function snake(members){
   return t;
 }
 
+// Firestore는 중첩 배열 미지원 → 팀을 {teamIndex, members} 객체 배열로 변환
+function teamsToFlat(teams){
+  if(!teams) return null;
+  return teams.map((members, i) => ({ t: i, members }));
+}
+function flatToTeams(flat){
+  if(!flat) return null;
+  const t = Array.from({length: N_TEAMS}, () => []);
+  flat.forEach(item => { t[item.t] = item.members; });
+  return t;
+}
 async function persist(members, teams){
-  await setDoc(STATE_DOC,{members, teams: teams??null});
+  await setDoc(STATE_DOC, { members, teams: teamsToFlat(teams) });
 }
 
 // ── 실시간 리스너: 이게 유일한 state 업데이트 경로 ──
 onSnapshot(STATE_DOC, snap=>{
   fbMembers = snap.exists() ? (snap.data().members||[]) : [];
-  fbTeams   = snap.exists() ? (snap.data().teams||null)  : null;
+  fbTeams   = snap.exists() ? flatToTeams(snap.data().teams||null) : null;
   renderAll();
 });
 
